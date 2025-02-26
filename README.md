@@ -25,7 +25,8 @@ curl -X POST https://order-processing-backend.onrender.com/orders \
      -d '{"user_id": 104, "item_ids": [101, 102, 103], "total_amount": 250.75}'
 
 
-Response
+#### **esponse**
+```sh
 json
 Copy
 Edit
@@ -35,5 +36,5 @@ Edit
   "item_ids": "101,102,103",
   "total_amount": 250.75,
   "status": "Pending"
-}
+}'
 
