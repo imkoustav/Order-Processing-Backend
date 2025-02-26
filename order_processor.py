@@ -73,55 +73,93 @@ stop_event = threading.Event()
 #             print(f"Error processing order: {e}")
 
 
-def process_orders(app):
-    with app.app_context():  # ✅ Add app context for DB access
-        while not stop_event.is_set():
-            try:
-                print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
-                order_id = order_queue.get(timeout=5)  
-                print(f"Fetched order {order_id} from queue")  # ✅ Debugging log
+# def process_orders(app):
+#     with app.app_context():  # ✅ Add app context for DB access
+#         while not stop_event.is_set():
+#             try:
+#                 print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
+#                 order_id = order_queue.get(timeout=5)  
+#                 print(f"Fetched order {order_id} from queue")  # ✅ Debugging log
 
-                session = Session()
-                order = session.query(Order).get(order_id)  
-                if not order:
-                    session.close()
-                    continue
+#                 session = Session()
+#                 order = session.query(Order).get(order_id)  
+#                 if not order:
+#                     session.close()
+#                     continue
 
-                # ✅ Count number of items
-                item_count = len(order.item_ids.split(","))
+#                 # ✅ Count number of items
+#                 item_count = len(order.item_ids.split(","))
 
-                # ✅ Determine processing time dynamically
-                if item_count < 3:
-                    processing_time = 2
-                elif 3 <= item_count <= 10:
-                    processing_time = 5
-                else:
-                    processing_time = 10
+#                 # ✅ Determine processing time dynamically
+#                 if item_count < 3:
+#                     processing_time = 2
+#                 elif 3 <= item_count <= 10:
+#                     processing_time = 5
+#                 else:
+#                     processing_time = 10
 
-                # ✅ Update status to "Processing"
-                order.status = "Processing"
-                order.processing_at = datetime.utcnow()
-                session.commit()
-                print(f"Updated order {order_id} to Processing (Processing Time: {processing_time} sec)")
+#                 # ✅ Update status to "Processing"
+#                 order.status = "Processing"
+#                 order.processing_at = datetime.utcnow()
+#                 session.commit()
+#                 print(f"Updated order {order_id} to Processing (Processing Time: {processing_time} sec)")
 
-                # ✅ Simulate processing time dynamically
-                time.sleep(processing_time)
+#                 # ✅ Simulate processing time dynamically
+#                 time.sleep(processing_time)
 
-                # ✅ Update status to "Completed"
-                order.status = "Completed"
-                order.completed_at = datetime.utcnow()
-                session.commit()
-                print(f"Updated order {order_id} to Completed")
+#                 # ✅ Update status to "Completed"
+#                 order.status = "Completed"
+#                 order.completed_at = datetime.utcnow()
+#                 session.commit()
+#                 print(f"Updated order {order_id} to Completed")
 
-                order_queue.task_done()
+#                 order_queue.task_done()
+#                 session.close()
+
+#             except Empty:
+#                 print("No orders to process. Waiting...")
+#                 continue  
+
+#             except Exception as e:
+#                 print(f"Error processing order: {e}")
+
+
+def process_orders():
+    while not stop_event.is_set():
+        try:
+            print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
+
+            order_id = order_queue.get(timeout=5)  
+            print(f"Fetched order {order_id} from queue")  # ✅ Debugging log
+
+            session = Session()  
+            order = session.query(Order).get(order_id)  
+            if not order:
+                print(f"⚠️ Order {order_id} not found in DB!")
                 session.close()
+                continue
 
-            except Empty:
-                print("No orders to process. Waiting...")
-                continue  
+            print(f"✅ Processing order {order_id}...")  # ✅ Debugging log
+            order.status = "Processing"
+            order.processing_at = datetime.utcnow()
+            session.commit()
 
-            except Exception as e:
-                print(f"Error processing order: {e}")
+            time.sleep(5)  # Simulated processing
+
+            order.status = "Completed"
+            order.completed_at = datetime.utcnow()
+            session.commit()
+            print(f"✅ Completed order {order_id}!")
+
+            order_queue.task_done()
+            session.close()
+
+        except Empty:
+            print("No orders to process. Waiting...")
+            continue  
+
+        except Exception as e:
+            print(f"❌ Error processing order: {e}")
 
 
 
