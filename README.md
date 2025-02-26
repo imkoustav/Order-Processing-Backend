@@ -24,3 +24,16 @@ curl -X POST https://order-processing-backend.onrender.com/orders \
      -H "Content-Type: application/json" \
      -d '{"user_id": 104, "item_ids": [101, 102, 103], "total_amount": 250.75}'
 
+
+Response
+json
+Copy
+Edit
+{
+  "order_id": 45,
+  "user_id": 104,
+  "item_ids": "101,102,103",
+  "total_amount": 250.75,
+  "status": "Pending"
+}
+
