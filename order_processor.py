@@ -169,6 +169,7 @@ def estimate_worker_count(app):
         pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
 
         if not pending_orders:
+            print("No pending orders......") # ✅✅✅✅Debug
             return 2  # Default minimum workers when no orders exist
 
         # Calculate the average item count in pending orders
@@ -177,6 +178,7 @@ def estimate_worker_count(app):
 
         # Determine number of workers based on avg item count
         if avg_item_count < 3:
+            print("Less than 3 pending orders......") # ✅✅✅✅Debug   
             return 2  # Low load, fewer workers
         elif 3 <= avg_item_count <= 10:
             return 5  # Moderate load
