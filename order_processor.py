@@ -167,12 +167,29 @@ def estimate_worker_count(app):
 #     print(f"Started {num_workers} order processing threads!")
 
 
+# def start_order_processing(app):
+#     num_workers = estimate_worker_count(app)  
+#     print(f"Starting {num_workers} order processing threads...")
+
+#     for _ in range(num_workers):
+#         worker_thread = threading.Thread(target=process_orders, args=(app,), daemon=True)
+#         worker_thread.start()
+
+#     print(f"Started {num_workers} order processing threads!")
+
 def start_order_processing(app):
-    num_workers = estimate_worker_count(app)  
+    with app.app_context():  # ✅ Ensure DB session works
+        pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
+
+        for order in pending_orders:
+            print(f"Re-adding pending order {order.id} to queue...")  # ✅ Debugging log
+            order_queue.put(order.id)  # ✅ Re-add to queue
+
+    num_workers = estimate_worker_count(app)
     print(f"Starting {num_workers} order processing threads...")
 
     for _ in range(num_workers):
-        worker_thread = threading.Thread(target=process_orders, args=(app,), daemon=True)
+        worker_thread = threading.Thread(target=process_orders, daemon=True)
         worker_thread.start()
 
     print(f"Started {num_workers} order processing threads!")
