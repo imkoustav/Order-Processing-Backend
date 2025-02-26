@@ -218,12 +218,12 @@ def estimate_worker_count(app):
 #     print(f"Started {num_workers} order processing threads!")
 
 def start_order_processing(app):
-    with app.app_context():  # ✅ Ensure DB session works
-        pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
+    # with app.app_context():  # ✅ Ensure DB session works
+    #     pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
 
-        for order in pending_orders:
-            print(f"Re-adding pending order {order.id} to queue...")  # ✅ Debugging log
-            order_queue.put(order.id)  # ✅ Re-add to queue
+    #     for order in pending_orders:
+    #         print(f"Re-adding pending order {order.id} to queue...")  # ✅ Debugging log
+    #         order_queue.put(order.id)  # ✅ Re-add to queue
 
     num_workers = estimate_worker_count(app)
     print(f"Starting {num_workers} order processing threads...")
