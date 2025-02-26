@@ -5,6 +5,7 @@ load_dotenv()
 print("🔍 DATABASE_URL from .env:", os.getenv("DATABASE_URL"))  # ✅ Debugging line
 
 from flask import Flask
+from flask_cors import CORS  # ✅ Import CORS
 from config import Config
 from models import db, ma
 from routes import routes
@@ -15,6 +16,7 @@ import sys
 
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(Config)
 
 # print("🔍 Database URL:", app.config["SQLALCHEMY_DATABASE_URI"])
