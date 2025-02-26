@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 # from queue_manager import order_queue
 from queue_manager import add_order_to_queue
 from datetime import datetime
+from order_processor import start_order_processing
 
 routes = Blueprint("routes", __name__)
 order_schema = OrderSchema()
