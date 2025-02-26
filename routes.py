@@ -51,9 +51,17 @@ def create_order():
         db.session.commit()
         db.session.refresh(new_order)  # ✅ Ensure ID is available
 
-        print(f"Adding order {new_order.id} to queue...")  # ✅ Debugging log
-        add_order_to_queue(new_order.id)  # ✅ Add to queue
+        # print(f"Adding order {new_order.id} to queue...")  # ✅ Debugging log
+        # add_order_to_queue(new_order.id)  # ✅ Add to queue
 
+        print(f"🟢 Adding order {new_order.id} to queue...")
+        add_order_to_queue(new_order.id)
+
+        print(f"✅ Order {new_order.id} created successfully!")
+
+        # ✅ Restart workers on new order
+        start_order_processing(current_app) 
+        
         return order_schema.jsonify(new_order), 201
     except Exception as e:
         db.session.rollback()
