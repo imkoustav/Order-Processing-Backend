@@ -1,0 +1,44 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+print("🔍 DATABASE_URL from .env:", os.getenv("DATABASE_URL"))  # ✅ Debugging line
+
+from flask import Flask
+from config import Config
+from models import db, ma
+from routes import routes
+from flask_migrate import Migrate
+from order_processor import start_order_processing, stop_order_processing  # Import stop function
+import signal
+import sys
+
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+# print("🔍 Database URL:", app.config["SQLALCHEMY_DATABASE_URI"])
+print("🔍 Database URL from Config:", app.config["SQLALCHEMY_DATABASE_URI"])  # ✅ Debugging line
+
+
+db.init_app(app)
+ma.init_app(app)
+migrate = Migrate(app, db)  # ✅ Initialize Flask-Migrate
+app.register_blueprint(routes)
+
+with app.app_context():
+    db.create_all()  # Ensure tables are created
+    start_order_processing(app)
+
+# Handle shutdown gracefully
+def shutdown_handler(signal_received, frame):
+    print("Shutting down gracefully...")
+    stop_order_processing()  # Stop order processing thread
+    sys.exit(0)
+
+# Catch termination signals
+signal.signal(signal.SIGINT, shutdown_handler)  # Handle Ctrl+C
+signal.signal(signal.SIGTERM, shutdown_handler)  # Handle process termination
+
+if __name__ == "__main__":
+    app.run(debug=False)

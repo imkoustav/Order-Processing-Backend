@@ -1,0 +1,28 @@
+# Ignore virtual environment
+venv/
+.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore database migrations and local database files
+migrations/
+instance/
+*.sqlite3
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore Render & deployment cache files
+.DS_Store
+*.swp
+*.swo
