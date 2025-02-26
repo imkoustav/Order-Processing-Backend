@@ -1,25 +1,31 @@
-text
-# Order Processing Backend
-A scalable order processing system built using Flask, PostgreSQL, and Render. It efficiently handles incoming orders, processes them asynchronously, and provides real-time metrics.
+# 🛒 Order Processing Backend
 
-## Live API Endpoint
-- **Base URL**: https://order-processing-backend.onrender.com
+A scalable **Flask-based order processing system** using **PostgreSQL (Neon.tech)** and **Render** for deployment. It handles incoming orders asynchronously, processes them dynamically based on item count, and provides real-time metrics.
 
-## Features
-- **Order Creation**: Accepts new orders with multiple items.
-- **Order Processing**: Handles order status updates asynchronously.
-- **Metrics API**: Provides real-time stats on order status and average processing time.
-- **Queue Management**: Uses an in-memory queue for efficient processing.
-- **Dynamic Processing Time**: Based on item count.
+---
 
-## API Endpoints & Usage
+## **🚀 Live API Endpoint**
+👉 **Base URL for metrics**: [https://order-processing-backend.onrender.com/metrics](https://order-processing-backend.onrender.com/metrics)
+
+---
+
+## **📌 Features**
+- ✅ **Order Creation**: Accepts new orders with multiple items.
+- ✅ **Order Processing**: Asynchronous status updates.
+- ✅ **Metrics API**: Real-time order status tracking.
+- ✅ **Queue System**: Ensures smooth processing.
+- ✅ **Dynamic Processing Time**: Based on item count.
+
+---
+
+## **📤 API Endpoints & Usage**
 ### 1. Create an Order
 **Request**
 curl -X POST https://order-processing-backend.onrender.com/orders
 -H "Content-Type: application/json"
 -d '{"user_id": 104, "item_ids":101102103, "total_amount": 250.75}'
 
-text
+
 **Response**
 {
 "order_id": 45,
@@ -29,7 +35,6 @@ text
 "status": "Pending"
 }
 
-text
 
 ### 2. Check Order Status
 **Request**
@@ -42,13 +47,13 @@ text
 "status": "Processing"
 }
 
-text
+
 
 ### 3. Get Metrics
 **Request**
 curl -X GET https://order-processing-backend.onrender.com/metrics
 
-text
+
 **Response**
 {
 "total_orders": 50,
@@ -58,38 +63,38 @@ text
 "average_processing_time_seconds": "5.75"
 }
 
-text
+
 
 ## Setup & Installation
 1. **Clone the Repo**
 git clone https://github.com/imkoustav/Order-Processing-Backend.git
 cd Order-Processing-Backend
 
-text
+
 
 2. **Create a Virtual Environment**
 python -m venv venv
 source venv/bin/activate # Mac/Linux
 venv\Scripts\activate # Windows
 
-text
+
 
 3. **Install Dependencies**
 pip install -r requirements.txt
 
-text
+
 
 4. **Setup the Database**
 Use Neon.tech as the PostgreSQL database (or a local database).
 Create a `.env` file with:
 DATABASE_URL=postgresql://your_username:your_password@your_neon_url/neondb?sslmode=require
 
-text
+
 
 5. **Run the Server**
 python app.py
 
-text
+
 
 ## Deployment on Render
 1. **Connect GitHub**
@@ -100,7 +105,7 @@ In Render Dashboard → Go to Environment Variables.
 Add:
 DATABASE_URL=postgresql://your_username:your_password@your_neon_url/neondb?sslmode=require
 
-text
+
 
 3. **Set Up Deployment**
 - **Build Command**: `pip install -r requirements.txt`
@@ -136,7 +141,6 @@ Click Deploy and monitor Render Logs for any issues.
 1. **Install Locust**
 pip install locust
 
-text
 
 2. **Run Locust**
 - **For Local**:
@@ -155,7 +159,6 @@ Restart service via Render Dashboard.
 Run:
 tail -f logs/app.log
 
-text
 
 2. **Orders Stuck in Pending?**
 Check queue processing logs in Render.
