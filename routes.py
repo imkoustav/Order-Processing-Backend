@@ -9,6 +9,34 @@ routes = Blueprint("routes", __name__)
 order_schema = OrderSchema()
 orders_schema = OrderSchema(many=True)
     
+# @routes.route("/orders", methods=["POST"])
+# def create_order():
+#     try:
+#         data = request.get_json()
+#         new_order = Order(
+#             user_id=data["user_id"],
+#             item_ids=",".join(map(str, data["item_ids"])),
+#             total_amount=data["total_amount"],
+#             status="Pending"
+#         )
+#         db.session.add(new_order)
+#         db.session.commit()
+#         db.session.refresh(new_order)  # Ensures ID and properties are loaded
+
+#         print(f"Adding order {new_order.id} to queue...")  # ✅ Debugging log
+
+#         # ✅ Add the order to queue for processing
+#         print(f"I am degugging this {new_order.id}")
+#         add_order_to_queue(new_order.id)
+
+#         print(f"Order created: {new_order.id}")
+#         return order_schema.jsonify(new_order), 201
+#     except Exception as e:
+#         db.session.rollback()
+#         print(f"Error creating order: {e}")
+#         return jsonify({"error": "Failed to create order"}), 500 
+
+
 @routes.route("/orders", methods=["POST"])
 def create_order():
     try:
@@ -21,20 +49,16 @@ def create_order():
         )
         db.session.add(new_order)
         db.session.commit()
-        db.session.refresh(new_order)  # Ensures ID and properties are loaded
+        db.session.refresh(new_order)  # ✅ Ensure ID is available
 
         print(f"Adding order {new_order.id} to queue...")  # ✅ Debugging log
+        add_order_to_queue(new_order.id)  # ✅ Add to queue
 
-        # ✅ Add the order to queue for processing
-        print(f"I am degugging this {new_order.id}")
-        add_order_to_queue(new_order.id)
-
-        print(f"Order created: {new_order.id}")
         return order_schema.jsonify(new_order), 201
     except Exception as e:
         db.session.rollback()
-        print(f"Error creating order: {e}")
-        return jsonify({"error": "Failed to create order"}), 500    
+        print(f"❌ Error creating order: {e}")
+        return jsonify({"error": "Failed to create order"}), 500   
 
 
 @routes.route("/orders/<int:order_id>", methods=["GET"])
