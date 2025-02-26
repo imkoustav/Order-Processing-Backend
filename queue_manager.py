@@ -6,4 +6,5 @@ def add_order_to_queue(order_id):
     """Adds an order to the processing queue"""
     print(f"Adding order {order_id} to queue")  # ✅ Debugging log
     order_queue.put(order_id)
+    print(f"📌 Current Queue Size: {order_queue.qsize()}")  # ✅ Now shows updated size
 
