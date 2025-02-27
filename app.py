@@ -31,6 +31,8 @@ app.register_blueprint(routes)
 with app.app_context():
     db.create_all()  # Ensure tables are created
     start_order_processing(app)
+    print("🚀 Order processing workers started!")  # ✅ Debugging log
+    
 
 # Handle shutdown gracefully
 def shutdown_handler(signal_received, frame):
