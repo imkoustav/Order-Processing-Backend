@@ -37,18 +37,18 @@ with app.app_context():
 
 
 
-def monitor_workers():
-    while True:
-        active_threads = threading.active_count() - 1  
-        print(f"🔍 Checking workers... Active: {active_threads}")
+# def monitor_workers():
+#     while True:
+#         active_threads = threading.active_count() - 1  
+#         print(f"🔍 Checking workers... Active: {active_threads}")
 
-        if active_threads < 2:  
-            print("⚠️ No active workers found! Restarting workers...")
-            start_order_processing(app)
+#         if active_threads < 2:  
+#             print("⚠️ No active workers found! Restarting workers...")
+#             start_order_processing(app)
 
-        time.sleep(10)  # ✅ Check every 10 seconds
+#         time.sleep(10)  # ✅ Check every 10 seconds
 
-threading.Thread(target=monitor_workers, daemon=True).start()
+# threading.Thread(target=monitor_workers, daemon=True).start()
     
 
 # Handle shutdown gracefully
