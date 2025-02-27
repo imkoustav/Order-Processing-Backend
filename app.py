@@ -13,6 +13,8 @@ from flask_migrate import Migrate
 from order_processor import start_order_processing, stop_order_processing  # Import stop function
 import signal
 import sys
+import threading
+import time
 
 
 app = Flask(__name__)
@@ -32,6 +34,21 @@ with app.app_context():
     db.create_all()  # Ensure tables are created
     start_order_processing(app)
     print("🚀 Order processing workers started!")  # ✅ Debugging log
+
+
+
+def monitor_workers():
+    while True:
+        active_threads = threading.active_count() - 1  
+        print(f"🔍 Checking workers... Active: {active_threads}")
+
+        if active_threads < 2:  
+            print("⚠️ No active workers found! Restarting workers...")
+            start_order_processing(app)
+
+        time.sleep(10)  # ✅ Check every 10 seconds
+
+threading.Thread(target=monitor_workers, daemon=True).start()
     
 
 # Handle shutdown gracefully
