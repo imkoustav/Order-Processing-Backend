@@ -122,33 +122,40 @@ alt-svc: h3=":443"; ma=86400
 
 ## Setup & Installation
 1. **Clone the Repo**
+```
 git clone https://github.com/imkoustav/Order-Processing-Backend.git
 cd Order-Processing-Backend
+```
 
 
-
-2. **Create a Virtual Environment**
+3. **Create a Virtual Environment**
+```
 python -m venv venv
 source venv/bin/activate # Mac/Linux
 venv\Scripts\activate # Windows
+```
 
 
-
-3. **Install Dependencies**
+4. **Install Dependencies**
+```
 pip install -r requirements.txt
+```
 
 
-
-4. **Setup the Database**
+5. **Setup the Database**
+```
 Use Neon.tech as the PostgreSQL database (or a local database).
 Create a `.env` file with:
+```
+```
 DATABASE_URL=postgresql://your_username:your_password@your_neon_url/neondb?sslmode=require
+```
 
 
-
-5. **Run the Server**
+6. **Run the Server**
+```   
 python app.py
-
+```
 
 
 ## Deployment on Render for public API endpoint 
@@ -156,15 +163,18 @@ python app.py
 Go to Render. Click New Web Service → Connect GitHub Repo.
 
 2. **Set Up Environment Variables**
+```   
 In Render Dashboard → Go to Environment Variables.
 Add:
 DATABASE_URL=postgresql://your_username:your_password@your_neon_url/neondb?sslmode=require
+```
 
 
-
-3. **Set Up Deployment**
+4. **Set Up Deployment**
+```
 - **Build Command**: `pip install -r requirements.txt`
 - **Start Command**: `gunicorn app:app`
+```
 
 4. **Deploy & Monitor Logs**
 Click Deploy and monitor Render Logs for any issues.
@@ -214,8 +224,9 @@ Open http://localhost:8089 in your browser to see the UI.
 1. **Logs Not Updating?**
 Restart service via Render Dashboard.
 Run:
+```
 tail -f logs/app.log
+```
 
-
-2. **Orders Stuck in Pending?**
+3. **Orders Stuck in Pending?**
 Check queue processing logs in Render.
