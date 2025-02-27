@@ -55,7 +55,7 @@ alt-svc: h3=":443"; ma=86400
 }
 ```
 
-### 2. Check Order Status(provide the user_id ad the id in the URI)
+### 2. Check Order Status(provide the id and not the user_id in the id in the URI)
 **Request**
 ```
 curl -X GET https://order-processing-backend.onrender.com/orders/58
