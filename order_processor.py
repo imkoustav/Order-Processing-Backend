@@ -124,14 +124,53 @@ stop_event = threading.Event()
 #                 print(f"Error processing order: {e}")
 
 
+# def process_orders():
+#     while not stop_event.is_set():
+#         try:
+#             print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
+
+#             order_id = order_queue.get(timeout=5)  
+#             print(f"Fetched order {order_id} from queue")  # ✅ Debugging log
+
+#             session = Session()  
+#             order = session.query(Order).get(order_id)  
+#             if not order:
+#                 print(f"⚠️ Order {order_id} not found in DB!")
+#                 session.close()
+#                 continue
+
+#             print(f"✅ Processing order {order_id}...")  # ✅ Debugging log
+#             order.status = "Processing"
+#             order.processing_at = datetime.utcnow()
+#             session.commit()
+
+#             time.sleep(5)  # Simulated processing
+
+#             order.status = "Completed"
+#             order.completed_at = datetime.utcnow()
+#             session.commit()
+#             print(f"✅ Completed order {order_id}!")
+
+#             order_queue.task_done()
+#             session.close()
+
+#         except Empty:
+#             print("No orders to process. Waiting...")
+#             continue  
+
+#         except Exception as e:
+#             print(f"❌ Error processing order: {e}")
+
+
 def process_orders():
     while not stop_event.is_set():
         try:
             print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
-
+            time.sleep(1)  # ✅ Add small delay before fetching orders
+                    
             order_id = order_queue.get(timeout=5)  
             print(f"Fetched order {order_id} from queue")  # ✅ Debugging log
-
+            
             session = Session()  
             order = session.query(Order).get(order_id)  
             if not order:
@@ -139,13 +178,27 @@ def process_orders():
                 session.close()
                 continue
 
-            print(f"✅ Processing order {order_id}...")  # ✅ Debugging log
+            # ✅ Count number of items
+            item_count = len(order.item_ids.split(","))  # Convert string to list and count
+
+            # ✅ Determine processing time based on item count
+            if item_count < 3:
+                processing_time = 2
+            elif 3 <= item_count <= 10:
+                processing_time = 5
+            else:  # More than 10 items
+                processing_time = 10
+
+            # ✅ Update status to "Processing"
             order.status = "Processing"
             order.processing_at = datetime.utcnow()
             session.commit()
+            print(f"Updated order {order_id} to Processing (Processing Time: {processing_time} sec)")
 
-            time.sleep(5)  # Simulated processing
+            # ✅ Simulate processing time dynamically
+            time.sleep(processing_time)
 
+            # ✅ Update status to "Completed"
             order.status = "Completed"
             order.completed_at = datetime.utcnow()
             session.commit()
@@ -160,6 +213,7 @@ def process_orders():
 
         except Exception as e:
             print(f"❌ Error processing order: {e}")
+
 
 
 
