@@ -24,65 +24,65 @@ A scalable **Flask-based order processing system** using **PostgreSQL (Neon.tech
 ```
 curl -X POST https://order-processing-backend.onrender.com/orders \
      -H "Content-Type: application/json" \
-     -d '{"user_id": 58, "item_ids": [101, 102, 103], "total_amount": 250.75}'
+     -d '{"user_id": 64, "item_ids": [101, 102, 103], "total_amount": 250.75}'
 ```
 
 **Response**
 ```
 HTTP/1.1 201 Created
-Date: Thu, 27 Feb 2025 05:03:58 GMT
+Date: Thu, 27 Feb 2025 06:57:29 GMT
 Content-Type: application/json
 Transfer-Encoding: chunked
 Connection: close
 access-control-allow-origin: *
-rndr-id: 1798be63-2964-48e0
+rndr-id: 8292859c-7ff7-42d9
 vary: Accept-Encoding
 x-render-origin-server: gunicorn
 cf-cache-status: DYNAMIC
 Server: cloudflare
-CF-RAY: 9185a054ab094826-BOM
+CF-RAY: 918647b57eb13d06-BOM
 alt-svc: h3=":443"; ma=86400
 
 {
   "completed_at": null,
-  "created_at": "2025-02-27T05:03:55.677177",
-  "id": 189,
+  "created_at": "2025-02-27T06:57:26.723919",
+  "id": 322,
   "item_ids": "101,102,103",
   "processing_at": null,
   "status": "Pending",
   "total_amount": 250.75,
-  "user_id": 58
+  "user_id": 64
 }
 ```
 
-### 2. Check Order Status(provide the id and not the user_id in the id in the URI)
+### 2. Check Order Status(provide the id(322) and not the user_id(64) in the id in the URI)
 **Request**
 ```
-curl -X GET https://order-processing-backend.onrender.com/orders/58
+curl -X GET https://order-processing-backend.onrender.com/orders/322
 ```
 
 
 **Response**
 ```
 HTTP/1.1 200 OK
-Date: Thu, 27 Feb 2025 05:06:34 GMT
+Date: Thu, 27 Feb 2025 06:58:33 GMT
 Content-Type: application/json
 Transfer-Encoding: chunked
 Connection: close
 access-control-allow-origin: *
-rndr-id: d9abf3a4-0a0f-44c9
+rndr-id: 87936271-6d0d-402e
 vary: Accept-Encoding
 x-render-origin-server: gunicorn
 cf-cache-status: DYNAMIC
 Server: cloudflare
-CF-RAY: 9185a56dde5529ea-BOM
+CF-RAY: 918649773bf347d8-BOM
 Content-Encoding: gzip
 alt-svc: h3=":443"; ma=86400
 
 {
-  "order_id": 58,
+  "order_id": 322,
   "status": "Completed",
-  "time_taken_seconds": 6.752444
+  "time_taken_seconds": 8.752632
 }
 ```
 
