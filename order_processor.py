@@ -273,40 +273,41 @@ def estimate_worker_count(app):
 
 #     print(f"Started {num_workers} order processing threads!")
 
+
 # def start_order_processing(app):
-#     with app.app_context():  # ✅ Ensure DB session works
-#         pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
-
-#         for order in pending_orders:
-#             print(f"Re-adding pending order {order.id} to queue...")  # ✅ Debugging log
-#             order_queue.put(order.id)  # ✅ Re-add to queue
-
 #     num_workers = estimate_worker_count(app)
-#     print(f"Starting {num_workers} order processing threads...")
 
-#     for _ in range(num_workers):
+#     active_threads = threading.active_count() - 1  # Exclude the main thread
+#     print(f"🛠 Active worker threads: {active_threads}")
+
+#     if active_threads >= num_workers:  
+#         print("✅ Enough workers are already running. No need to start more.")
+#         return  # Prevent unnecessary worker creation
+
+#     print(f"⚙️ Starting {num_workers - active_threads} additional order processing threads...")
+
+#     for _ in range(num_workers - active_threads):
 #         worker_thread = threading.Thread(target=process_orders, daemon=True)
 #         worker_thread.start()
 
-#     print(f"Started {num_workers} order processing threads!")
+#     print(f"🚀 Total Active Workers Now: {threading.active_count() - 1}")  # ✅ Debugging log
 
 def start_order_processing(app):
+    with app.app_context():  # ✅ Ensure DB session works
+        pending_orders = db.session.query(Order).filter(Order.status == "Pending").all()
+
+        for order in pending_orders:
+            print(f"Re-adding pending order {order.id} to queue...")  # ✅ Debugging log
+            order_queue.put(order.id)  # ✅ Re-add to queue
+
     num_workers = estimate_worker_count(app)
+    print(f"Starting {num_workers} order processing threads...")
 
-    active_threads = threading.active_count() - 1  # Exclude the main thread
-    print(f"🛠 Active worker threads: {active_threads}")
-
-    if active_threads >= num_workers:  
-        print("✅ Enough workers are already running. No need to start more.")
-        return  # Prevent unnecessary worker creation
-
-    print(f"⚙️ Starting {num_workers - active_threads} additional order processing threads...")
-
-    for _ in range(num_workers - active_threads):
+    for _ in range(num_workers):
         worker_thread = threading.Thread(target=process_orders, daemon=True)
         worker_thread.start()
 
-    print(f"🚀 Total Active Workers Now: {threading.active_count() - 1}")  # ✅ Debugging log
+    print(f"Started {num_workers} order processing threads!")
 
 
 
