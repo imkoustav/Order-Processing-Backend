@@ -163,6 +163,8 @@ stop_event = threading.Event()
 
 
 def process_orders():
+    print(f"⚙️ Checking worker threads... Active threads: {threading.active_count()}")  # ✅ Debugging log
+            
     while not stop_event.is_set():
         try:
             print(f"Queue size: {order_queue.qsize()}")  # ✅ Debugging log
