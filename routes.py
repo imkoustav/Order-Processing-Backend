@@ -60,8 +60,8 @@ def create_order():
 
         print(f"✅ Order {new_order.id} created successfully!")
 
-        # # ✅ Restart workers on new order
-        # start_order_processing(current_app) 
+        # ✅ Restart workers on new order
+        start_order_processing(current_app) 
         
         return order_schema.jsonify(new_order), 201
     except Exception as e:
