@@ -21,48 +21,103 @@ A scalable **Flask-based order processing system** using **PostgreSQL (Neon.tech
 ## **📤 API Endpoints & Usage**
 ### 1. Create an Order
 **Request**
-curl -X POST https://order-processing-backend.onrender.com/orders
--H "Content-Type: application/json"
--d '{"user_id": 104, "item_ids":101102103, "total_amount": 250.75}'
-
+```
+curl -X POST https://order-processing-backend.onrender.com/orders \
+     -H "Content-Type: application/json" \
+     -d '{"user_id": 58, "item_ids": [101, 102, 103], "total_amount": 250.75}'
+```
 
 **Response**
+```
+HTTP/1.1 201 Created
+Date: Thu, 27 Feb 2025 05:03:58 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: close
+access-control-allow-origin: *
+rndr-id: 1798be63-2964-48e0
+vary: Accept-Encoding
+x-render-origin-server: gunicorn
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: 9185a054ab094826-BOM
+alt-svc: h3=":443"; ma=86400
+
 {
-"order_id": 45,
-"user_id": 104,
-"item_ids": "101,102,103",
-"total_amount": 250.75,
-"status": "Pending"
+  "completed_at": null,
+  "created_at": "2025-02-27T05:03:55.677177",
+  "id": 189,
+  "item_ids": "101,102,103",
+  "processing_at": null,
+  "status": "Pending",
+  "total_amount": 250.75,
+  "user_id": 58
 }
+```
 
-
-### 2. Check Order Status
+### 2. Check Order Status(provide the user_id ad the id in the URI)
 **Request**
-curl -X GET https://order-processing-backend.onrender.com/orders/45
+```
+curl -X GET https://order-processing-backend.onrender.com/orders/58
+```
 
-text
+
 **Response**
-{
-"order_id": 45,
-"status": "Processing"
-}
+```
+HTTP/1.1 200 OK
+Date: Thu, 27 Feb 2025 05:06:34 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: close
+access-control-allow-origin: *
+rndr-id: d9abf3a4-0a0f-44c9
+vary: Accept-Encoding
+x-render-origin-server: gunicorn
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: 9185a56dde5529ea-BOM
+Content-Encoding: gzip
+alt-svc: h3=":443"; ma=86400
 
+{
+  "order_id": 58,
+  "status": "Completed",
+  "time_taken_seconds": 6.752444
+}
+```
 
 
 ### 3. Get Metrics
 **Request**
+```
 curl -X GET https://order-processing-backend.onrender.com/metrics
-
+```
 
 **Response**
-{
-"total_orders": 50,
-"pending_orders": 5,
-"processing_orders": 3,
-"completed_orders": 42,
-"average_processing_time_seconds": "5.75"
-}
+```
+HTTP/1.1 200 OK
+Date: Thu, 27 Feb 2025 05:09:04 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: close
+access-control-allow-origin: *
+rndr-id: f55b6345-8a48-48dc
+vary: Accept-Encoding
+x-render-origin-server: gunicorn
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: 9185a916cc093c64-BOM
+Content-Encoding: gzip
+alt-svc: h3=":443"; ma=86400
 
+{
+  "average_processing_time_seconds": "6.3691064731182796",
+  "completed_orders": 186,
+  "pending_orders": 0,
+  "processing_orders": 0,
+  "total_orders": 186
+}
+```
 
 
 ## Setup & Installation
@@ -96,7 +151,7 @@ python app.py
 
 
 
-## Deployment on Render
+## Deployment on Render for public API endpoint 
 1. **Connect GitHub**
 Go to Render. Click New Web Service → Connect GitHub Repo.
 
@@ -121,8 +176,8 @@ Click Deploy and monitor Render Logs for any issues.
 - **Deployment on Render**: Free-tier hosting with continuous deployment. Auto-redeploy on GitHub push.
 
 ## Links
-- **GitHub Repo**: Order Processing Backend
-- **Deployed API**: https://order-processing-backend.onrender.com
+- **GitHub Repo**: [https://github.com/imkoustav/Order-Processing-Backend](https://github.com/imkoustav/Order-Processing-Backend)
+- **Deployed API for metrics**: [https://order-processing-backend.onrender.com/metrics](https://order-processing-backend.onrender.com/metrics)
 
 ## Future Improvements
 - **Persistent queue (Redis)** instead of in-memory.
@@ -139,7 +194,9 @@ Click Deploy and monitor Render Logs for any issues.
 
 ## Load Testing with Locust
 1. **Install Locust**
+```
 pip install locust
+```
 
 
 2. **Run Locust**
